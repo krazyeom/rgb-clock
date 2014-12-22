@@ -1,0 +1,64 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+<polymer-element name="rgb-clock" attributes="fontsize">
+
+	<template>
+
+    <style>
+    .clock {
+			color: {{textcolor}};
+			font-size: {{fontsize}}px;
+			text-align: center;
+			background-color: #{{bclock}};
+			height: 100%;
+			line-height: {{lheight}}px;
+		}
+
+   </style>
+
+    <div class="clock">
+	    {{clock}}
+		</div>
+
+	</template>
+
+	<script>
+
+	Polymer('rgb-clock', {
+
+		ready: function() {
+			this.updateClock();
+		},
+		updateClock: function() {
+
+			var d = new Date();
+
+			var hours = this.checkTime(d.getHours())+"";
+			var mins = this.checkTime(d.getMinutes())+"";
+			var secs = this.checkTime(d.getSeconds())+"";
+
+			this.clock = hours+":"+mins+":"+secs;
+			this.bclock = hours+mins+secs;
+
+			hours = 255 - d.getHours().toString(10);
+			mins = 255 - d.getMinutes().toString(10);
+			secs = 255 - d.getSeconds().toString(10);
+
+			this.textcolor = 'rgb('+hours+','+mins+','+secs+')';
+
+			this.lheight = this.shadowRoot.querySelector(".clock").clientHeight;
+
+			that = this;
+
+			setTimeout(function(){
+				that.updateClock();
+			}, 500);
+		},
+		checkTime: function(i) {
+    	return i<10?"0"+i:i;
+		}
+
+	});
+
+	</script>
+</polymer-element>
